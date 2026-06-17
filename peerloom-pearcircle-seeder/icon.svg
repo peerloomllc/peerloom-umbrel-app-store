@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1FB46A"/>
+      <stop offset="1" stop-color="#0E8C50"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="114" fill="url(#bg)"/>
+  <!-- location pin -->
+  <path fill="#FFFFFF" d="M256 104c-66 0-119 52-119 117 0 86 102 174 114 184a8 8 0 0 0 10 0c12-10 114-98 114-184 0-65-53-117-119-117z"/>
+  <!-- inner ring = the "circle" of members -->
+  <circle cx="256" cy="221" r="58" fill="none" stroke="#0E8C50" stroke-width="22"/>
+  <!-- three member dots around the ring -->
+  <circle cx="256" cy="163" r="15" fill="#0E8C50"/>
+  <circle cx="206" cy="250" r="15" fill="#0E8C50"/>
+  <circle cx="306" cy="250" r="15" fill="#0E8C50"/>
+</svg>
