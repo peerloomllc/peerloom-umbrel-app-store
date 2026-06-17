@@ -3,7 +3,7 @@ version: "3.7"
 services:
   app_proxy:
     environment:
-      APP_HOST: pearcircle-seeder_app_1
+      APP_HOST: peerloom-pearcircle-seeder_app_1
       APP_PORT: 8730
 
   app:
