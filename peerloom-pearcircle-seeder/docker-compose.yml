@@ -7,7 +7,7 @@ services:
       APP_PORT: 8730
 
   app:
-    image: ghcr.io/peerloomllc/pearcircle-seeder:0.1.1@sha256:efd3cc778ed17c7bfd2199f08bc3fd115e9f981fc302bb9ed9d3b421d2d63b57
+    image: ghcr.io/peerloomllc/pearcircle-seeder:0.1.2@sha256:806b79457382b72f22dbceed060a8b907e5b7372d36bb49cfca2ab7bd4424805
     restart: on-failure
     stop_grace_period: 1m
     security_opt:
