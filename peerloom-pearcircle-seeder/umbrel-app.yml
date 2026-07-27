@@ -3,7 +3,7 @@ id: peerloom-pearcircle-seeder
 name: PearCircle Seeder
 tagline: Keep your PearCircle circles online 24/7
 category: networking
-version: "1.0.19"
+version: "1.1.0"
 port: 8730
 description: >-
   Run a blind seeder for your PearCircle circles on your Umbrel so their
@@ -34,9 +34,25 @@ repo: https://github.com/peerloomllc/pearcircle
 support: https://github.com/peerloomllc/pearcircle/issues
 gallery: []
 releaseNotes: >-
-  First release of the PearCircle seeder for Umbrel. Runs the blind-seeder
-  worklet as an always-on service with a dashboard for enrolling circles and
-  watching replication.
+  A big update, covering everything since 1.0.19.
+
+
+  New: give your seeder a friendly name in the dashboard, and everyone in
+  your circles sees that name in their app instead of a long string of
+  letters and numbers.
+
+
+  Improvements: the dashboard is now a single screen with a light and dark
+  theme. Linking a phone shows its progress step by step instead of sitting
+  there looking frozen. And your seeder now warns you if a circle sends it
+  anything it could actually read, so you can be sure your circles stay
+  private.
+
+
+  Fixes: circles no longer get stuck saying they need repair when nothing is
+  wrong, and a repair now finishes without you having to force-stop the app.
+  Also fixed a problem that could stop an encrypted circle's stored data
+  being read back correctly.
 path: ""
 defaultUsername: ""
 defaultPassword: ""
