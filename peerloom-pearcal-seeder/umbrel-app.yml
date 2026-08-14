@@ -4,6 +4,7 @@ manifestVersion: 1
 # https://github.com/peerloomllc/peerloom-umbrel-app-store
 id: peerloom-pearcal-seeder
 name: PearCal Seeder
+icon: https://peerloomllc.com/assets/icon-pearcal-seeder.svg
 tagline: Keep your PearCal groups in sync 24/7
 category: networking
 version: "1.0.34"
