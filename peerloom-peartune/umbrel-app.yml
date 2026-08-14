@@ -1,6 +1,7 @@
 manifestVersion: 1
 id: peerloom-peartune
 name: PearTune
+icon: https://peerloomllc.com/assets/icon-peartune.svg
 tagline: Your music, playable anywhere - and shareable with friends
 category: media
 version: "1.0.0"
