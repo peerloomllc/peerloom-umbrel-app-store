@@ -16,7 +16,7 @@ services:
   # umbrelOS fills with the app password shown next to PearTune in the app list.
   # The host refuses to start on a non-loopback bind without it.
   app:
-    image: ghcr.io/peerloomllc/peartune-host:0.2.46@sha256:5ba422b708214e64a9b2a8ee740aecbe64f12259f0abad4938da0e93f2c986c7
+    image: ghcr.io/peerloomllc/peartune-host:0.2.49@sha256:9263221809ece21fce9207308f81e923d228490063ecfef278c61bad0fb7290e
     restart: on-failure
     stop_grace_period: 1m
     network_mode: host
@@ -78,3 +78,25 @@ services:
       # No Home Assistant installed? Docker creates the path empty, PearTune sees no
       # configuration.yaml, and the feature stays switched off. Nothing breaks.
       - ${UMBREL_ROOT}/app-data/home-assistant/data:/ha-config
+      # EXTERNAL / ATTACHED DRIVES, so the folder picker can reach a USB music disk.
+      # /media and /mnt are exactly where a person mounts one, and the picker already
+      # keeps both visible (visibleMounts in host/adapters/folder.js). Read-only, like
+      # the library mount.
+      #
+      # Long-form with propagation: rslave, and that is the load-bearing part. A plain
+      # bind snapshots the mount table at container start, so a drive plugged in AFTER
+      # the app starts would leave the container staring at an empty directory forever -
+      # which reads as "PearTune cannot see my drive". rslave makes new host mounts
+      # under these paths appear inside the running container.
+      - type: bind
+        source: /media
+        target: /media
+        read_only: true
+        bind:
+          propagation: rslave
+      - type: bind
+        source: /mnt
+        target: /mnt
+        read_only: true
+        bind:
+          propagation: rslave
