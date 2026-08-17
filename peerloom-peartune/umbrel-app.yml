@@ -14,7 +14,7 @@ category: media
 # app releases. The NEXT app release must version past 1.0.3 or its store sync ships
 # to nobody -
 # build-image.sh warns out loud when that collision happens.
-version: "1.0.4"
+version: "1.0.5"
 port: 8741
 description: >-
   Play the music on your Umbrel from anywhere, without exposing your server to the
