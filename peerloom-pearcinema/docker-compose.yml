@@ -1,0 +1,124 @@
+version: "3.7"
+
+services:
+  # NO app_proxy, and that is not an oversight.
+  #
+  # The host MUST run with network_mode: host. Measured on a real Umbrel, twice,
+  # with PearTune's real image: under Docker's default bridge the firewall admits
+  # the phone (gate:allow-for-pairing) and the connection then dies before the pair
+  # channel opens. Bridge NAT is a second layer of NAT and holepunching does not
+  # survive it. The same protocol runs here, so the same rule applies.
+  #
+  # app_proxy is itself a container on a bridge network, so it cannot front a
+  # host-networked service - which is why Umbrel's own host-networked apps (Plex,
+  # Home Assistant) do not use it either. The proxy WAS the only thing standing in
+  # for our missing auth, so the dashboard carries its own: PEARCINEMA_PASSWORD,
+  # which umbrelOS fills with the app password shown next to PearCinema in the app
+  # list. The host must refuse to start on a non-loopback bind without it.
+  app:
+    # PINNED BY DIGEST, and the digest IS the rollback plan: reverting a bad release is
+    # re-pinning the previous one, a one-line change to a file that already works that
+    # way. Pushed 2026-08-24 as a manifest list carrying BOTH linux/amd64 and linux/arm64
+    # - Umbrel Home is x86_64 and a Pi-class Umbrel is arm64, and a single-arch image
+    # installs on one and fails on the other with an error that says nothing useful.
+    image: ghcr.io/peerloomllc/pearcinema-host:0.1.0@sha256:952a9791f887d878f5f7b1b1060fd02fd4e2135aa4fd90d07448fcc1d56d1b98
+    restart: on-failure
+    stop_grace_period: 1m
+    network_mode: host
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      PEARCINEMA_HTTP_HOST: 0.0.0.0
+      # 8751. THE SUITE'S PORT MAP, because a box running several of these at once
+      # is the expected setup: 8731 PearCircle seeder, 8741 PearTune dashboard,
+      # 8742 PearTune CAST, 8751 this, 8752 reserved for PearCinema's cast.
+      #
+      # It was 8742 until 2026-08-13, chosen because "PearTune has 8741". PearTune
+      # binds BOTH - the second is its Chromecast media server - and the collision
+      # was invisible until the image ran on a real Umbrel next to a real PearTune.
+      PEARCINEMA_HTTP_PORT: "8751"
+      PEARCINEMA_PASSWORD: ${APP_PASSWORD}
+      PEARCINEMA_NAME: My Library
+      PEARCINEMA_DATA: /data
+      # The DEFAULT folders, for an install where nobody has opened the dashboard
+      # yet. These are paths INSIDE the container and they point at the mounts
+      # below. The operator can pick different ones later; the dashboard browses
+      # what the container can actually see, which is the only way to avoid the
+      # "I typed the path my other app uses and got zero files" trap.
+      PEARCINEMA_FOLDERS: /library/Movies:/library/TV Shows
+    volumes:
+      # The host identity seed, the grant store, and the folder scan cache. Losing
+      # this means every device must re-pair; leaking the seed means somebody can
+      # impersonate your library.
+      #
+      # The scan cache matters more here than it would for music: re-probing a 3 TB
+      # drive with ffprobe is twenty minutes of disk, and without this volume that
+      # happens on every restart.
+      - ${APP_DATA_DIR}/data:/data
+
+      # WHERE AN UMBREL USER'S VIDEO ACTUALLY LIVES - and for film libraries that is
+      # usually NOT the internal disk. Films are hundreds of gigabytes; the measured
+      # real library is 3 TB on a USB drive.
+      #
+      # WRITABLE since sidecar writing shipped (Tim's call, 2026-08-15; these were
+      # `:ro` before that). The dashboard's explicit save-to-library action puts
+      # fetched metadata beside the films as standard .nfo and poster files, so it
+      # needs the mount to admit writes. The action itself only ever CREATES new
+      # files - never overwrites, never deletes (host/sidecars.js) - and nothing
+      # else in the host writes here at all: playback, scanning, remux and
+      # transcode all still treat the library as read-only.
+      - ${UMBREL_ROOT}/home/Downloads:/library
+
+      # EXTERNAL DRIVES, and `rslave` is the load-bearing part.
+      #
+      # Without it, a drive plugged in AFTER this container started is invisible
+      # inside it - the mount happens in the host's namespace and never propagates.
+      # The failure looks exactly like an empty library, which sends an operator
+      # hunting through the app instead of at the mount. This is the same gap
+      # already logged against PearTune, and it matters far more here because an
+      # external drive is the normal case for video rather than an unusual one.
+      #
+      # SHORT SYNTAX IS A HARD RULE HERE, and this line was the long form until
+      # 2026-08-24. umbreld patches an app's compose on install AND on update, and
+      # its patcher calls .replace() on every volume entry - so an object volume
+      # crashes both with "volume?.replace is not a function". That is exactly how
+      # PearTune's store listing 1.0.4 wedged mid-update at 1% with the container
+      # already removed, leaving the app stuck in "updating" for good (peartune
+      # DONE 2026-08-17). This listing has never been installed, so it would have
+      # been the FIRST install that hit it. test/umbrel-compose.test.js guards it.
+      #
+      # Writable rather than `:ro` - PearTune's is read-only and PearCinema's cannot
+      # be, because the library that gets metadata saved beside it is usually the one
+      # on the external drive. Only the dashboard's explicit save action ever writes,
+      # and it only ever creates new files (host/sidecars.js).
+      - ${UMBREL_ROOT}/external:/external:rslave
+
+    # THE VIDEO ENGINE, for hardware transcode (proposals/2026-08-13-hardware-
+    # transcode.md). This is the compose edit PR #9 promised would be enough, and it
+    # is the whole grant: no privileged mode, no extra capabilities. The host probes
+    # the device at startup and only a probe that produced real bytes unlocks the
+    # transcode mode, with the result shown on the dashboard either way.
+    #
+    # ONE HONEST CAVEAT: unlike the probe, this line is NOT harmless on a box with
+    # no /dev/dri at all - Docker refuses to CREATE a container whose device path
+    # does not exist on the host, which is a failure to start rather than a feature
+    # staying off. Every Umbrel target has one (Intel iGPU or the Pi's vc4), so it
+    # ships on; a headless VM install with no GPU node must delete these two lines,
+    # and everything else keeps working because the probe fails closed.
+    devices:
+      - /dev/dri:/dev/dri
+
+    # AN NVIDIA CARD IS THE OTHER SHAPE OF THE SAME GRANT, and there is no device path
+    # for it: NVENC reaches the card through the NVIDIA Container Toolkit. Uncomment
+    # this on a box with an NVIDIA card AND that toolkit installed, and delete the
+    # /dev/dri lines above if the box has no Intel or AMD graphics at all. The host
+    # probes each vendor's real encoder at startup and uses whichever answers, so
+    # leaving this off simply means the card is not offered (host/engines.js).
+    #
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu, video]
