@@ -3,7 +3,7 @@ id: peerloom-pearcinema
 name: PearCinema
 tagline: Your films and shows, playable anywhere - and shareable with family
 category: media
-version: "1.0.4"
+version: "1.0.5"
 port: 8751
 description: >-
   Watch the films and shows on your Umbrel from anywhere, without exposing your
@@ -57,7 +57,7 @@ description: >-
 
 
   YOU decide who gets in. Every device that pairs appears here with a name it chose
-  and a person it belongs to. Revoke a device and playback stops within a second,
+  and a person it belongs to. Revoke a device and playback stops within seconds,
   mid-film - not "on next login". Revoke a person and every device they hold dies at
   once. There are no shared passwords or bearer tokens anywhere in the design: every
   connection is authenticated by the device's own key.
@@ -79,7 +79,13 @@ repo: https://github.com/peerloomllc/pearcinema
 support: https://github.com/peerloomllc/pearcinema/issues
 gallery: []
 releaseNotes: |-
-  Improvements
+  Bug Fixes
+  - Films and shows in the HEVC format now show a picture on iPhones and iPads. They
+    played the sound with a black screen where the picture should have been, which
+    affected more than half of a typical collection. Nothing about the picture is
+    changed to fix it - it is sent in a wrapper Apple devices can open.
+
+  Earlier improvements
   - Saving a change to which folder your films are in now answers straight away. It
     used to sit there while every file was read, which on a big collection is minutes
     of a page that looks stuck. It still checks the new folder is really there first,
@@ -114,7 +120,7 @@ releaseNotes: |-
   - Someone you have shared with can ask for a film you do not have.
 
   Sharing and safety
-  - Pair a device by scanning a code. Revoke it and playback stops within a second,
+  - Pair a device by scanning a code. Revoke it and playback stops within seconds,
     mid-film.
   - Guest passes that expire by themselves.
   - Nothing about your library is uploaded anywhere, and nobody you share with gets a
