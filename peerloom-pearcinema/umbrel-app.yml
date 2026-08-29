@@ -1,6 +1,11 @@
 manifestVersion: 1
 id: peerloom-pearcinema
 name: PearCinema
+# Hosted on the website because umbrelOS falls back to its OFFICIAL-apps gallery CDN
+# when this field is missing, which 404s for community-store apps - and the listing
+# then shows a generic tile. The icon.svg sitting in this directory is NOT what
+# umbrelOS 0.5.x reads. GitHub raw links do not work either: text/plain + nosniff.
+icon: https://peerloomllc.com/assets/icon-pearcinema.svg
 tagline: Your films and shows, playable anywhere - and shareable with family
 category: media
 version: "1.0.5"
