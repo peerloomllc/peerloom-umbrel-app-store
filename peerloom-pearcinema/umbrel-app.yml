@@ -82,7 +82,13 @@ website: https://peerloomllc.com
 dependencies: []
 repo: https://github.com/peerloomllc/pearcinema
 support: https://github.com/peerloomllc/pearcinema/issues
-gallery: []
+# Full URLs, not filenames: umbrelOS renders a community app's gallery entry
+# straight into an <img src>, the same way it does the icon. Filenames only work
+# for OFFICIAL-store apps, where it builds a CDN path from the app id.
+gallery:
+  - https://peerloomllc.com/assets/gallery-pearcinema-1.jpg
+  - https://peerloomllc.com/assets/gallery-pearcinema-2.jpg
+  - https://peerloomllc.com/assets/gallery-pearcinema-3.jpg
 releaseNotes: |-
   Bug Fixes
   - Films and shows in the HEVC format now show a picture on iPhones and iPads. They
