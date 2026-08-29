@@ -55,7 +55,13 @@ website: https://peerloomllc.com
 dependencies: []
 repo: https://github.com/peerloomllc/peartune
 support: https://github.com/peerloomllc/peartune/issues
-gallery: []
+# Full URLs for the same reason `icon:` is one: umbrelOS maps bare filenames to the
+# OFFICIAL-apps gallery CDN, which 404s for a community-store app. 2880x1800, which is
+# what the official store serves for Navidrome, Jellyfin and Immich.
+gallery:
+  - https://peerloomllc.com/assets/gallery-peartune-1.jpg
+  - https://peerloomllc.com/assets/gallery-peartune-2.jpg
+  - https://peerloomllc.com/assets/gallery-peartune-3.jpg
 releaseNotes: |-
   New
   - Play your music on the Google and Home Assistant speakers around your home.
