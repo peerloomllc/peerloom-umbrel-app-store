@@ -11,10 +11,12 @@ category: media
 # build-image.sh stamps it from app.json's version on every synced release; the
 # out-of-band bumps past 1.0.0 (1.0.1 catch-up, 1.0.2 wma host, 1.0.3 for the
 # 0.2.46 seekable-transcode host) exist so installs get offered host updates between
-# app releases. The NEXT app release must version past 1.0.3 or its store sync ships
-# to nobody -
-# build-image.sh warns out loud when that collision happens.
-version: "1.0.5"
+# app releases. Resynced from the live store on 2026-08-29 (1.0.4 = host 0.2.49 + USB
+# drives, 1.0.5 = the urgent compose fix; both bumps were made in the store checkout).
+# build-image.sh refuses to sync a listing whose version is not GREATER than the one
+# the store already carries, so this literal can no longer drift below the store in
+# silence.
+version: "1.0.6"
 port: 8741
 description: >-
   Play the music on your Umbrel from anywhere, without exposing your server to the
@@ -57,29 +59,25 @@ repo: https://github.com/peerloomllc/peartune
 support: https://github.com/peerloomllc/peartune/issues
 # Full URLs for the same reason `icon:` is one: umbrelOS maps bare filenames to the
 # OFFICIAL-apps gallery CDN, which 404s for a community-store app. 2880x1800, which is
-# what the official store serves for Navidrome, Jellyfin and Immich.
+# what the official store serves for Navidrome, Jellyfin and Immich. Captured by
+# scripts/dashboard-shots.mjs (SHOT_W=1200 SHOT_H=750 SHOT_DPR=2.4).
 gallery:
   - https://peerloomllc.com/assets/gallery-peartune-1.jpg
   - https://peerloomllc.com/assets/gallery-peartune-2.jpg
   - https://peerloomllc.com/assets/gallery-peartune-3.jpg
 releaseNotes: |-
-  New
-  - Play your music on the Google and Home Assistant speakers around your home.
-  - Voice control through Home Assistant: say "Okay Nabu, play Led Zeppelin", or name a room, like "put on Metallica in the kitchen".
-  - Songs in .wma and .aiff formats now play, streamed or downloaded for offline. (Needs the latest phone app too.)
-  - Music on a USB or external drive plugged into your Umbrel can now be chosen as your library.
+  New Features
+  - Like the song you're listening to straight from the player. The heart is on the player itself now, in both looks.
   Improvements
-  - Song lengths show right away when listening away from home.
-  - Jumping around inside a song now works when listening away from home.
-  - Download is easier to reach: long-press any album or track, anywhere in the app.
-  - Clearer messages when a library cannot be reached or read, instead of it just looking empty.
-  - Converting songs for streaming is lighter on your server: conversions now stop the moment nobody is listening.
-  Fixes
-  - Opening the dashboard while music plays from a Jellyfin or Navidrome library no longer briefly knocks the server over.
-  - Playback that hits a bad patch of network picks itself back up instead of stopping.
-  - Music no longer goes silent when the next song starts while the app is in the background.
-  - The lock screen play button no longer ends a speaker cast by accident.
-  - Leaving speaker casting hands playback back to the phone properly, and speakers that cannot be reached stay out of the list.
+  - The albums grid keeps loading as you scroll. No more "Load more" button.
+  - Uses less memory while playing. The app now fetches music a little at a time instead of pulling a whole song ahead.
+  Bug Fixes
+  - Music now pauses when your Bluetooth car or headset disconnects, or when you unplug wired headphones, instead of sometimes carrying on through the phone's speaker.
+  - Your queue no longer disappears after a pause. If the connection to your library drops while the phone is locked, the queue is kept and comes back as soon as the library is reachable again.
+  - Tapping Shuffle on an artist now really shuffles from the first song, so the list no longer runs out after a few tracks.
+  - WMA files from a Jellyfin library now play, the same as from a folder library. (Needs the updated library host.)
+  - Music folders that use shortcuts or symbolic links are now included in your library. (Needs the updated library host.)
+  - On a Mac, "Update now" works again. Note for Mac users already on 1.0.2 or 1.0.3: install this version by hand once, and updates will apply themselves from then on.
 path: ""
 defaultUsername: ""
 # umbrelOS replaces defaultPassword with the derived value when this is set - it is the
