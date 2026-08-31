@@ -3,12 +3,14 @@ id: peerloom-pearcinema
 name: PearCinema
 # Hosted on the website because umbrelOS falls back to its OFFICIAL-apps gallery CDN
 # when this field is missing, which 404s for community-store apps - and the listing
-# then shows a generic tile. The icon.svg sitting in this directory is NOT what
-# umbrelOS 0.5.x reads. GitHub raw links do not work either: text/plain + nosniff.
+# then shows a generic tile. PearTune has carried this note since it shipped; this app
+# simply never got the field, so its icon was blank from the first listing to
+# 2026-08-28. The icon.svg sitting in this directory is NOT what umbrelOS reads.
+# GitHub raw links do not work either: text/plain + nosniff, browsers refuse them.
 icon: https://peerloomllc.com/assets/icon-pearcinema.svg
 tagline: Your films and shows, playable anywhere - and shareable with family
 category: media
-version: "1.0.5"
+version: "1.1.3"
 port: 8751
 description: >-
   Watch the films and shows on your Umbrel from anywhere, without exposing your
@@ -83,65 +85,28 @@ dependencies: []
 repo: https://github.com/peerloomllc/pearcinema
 support: https://github.com/peerloomllc/pearcinema/issues
 # Full URLs, not filenames: umbrelOS renders a community app's gallery entry
-# straight into an <img src>, the same way it does the icon. Filenames only work
-# for OFFICIAL-store apps, where it builds a CDN path from the app id.
+# straight into an <img src> (CommunityAppStoreAppGalleryImage.vue), the same way
+# it does the icon. Filenames only work for OFFICIAL-store apps, where it builds a
+# CDN path from the app id.
 gallery:
   - https://peerloomllc.com/assets/gallery-pearcinema-1.jpg
   - https://peerloomllc.com/assets/gallery-pearcinema-2.jpg
   - https://peerloomllc.com/assets/gallery-pearcinema-3.jpg
 releaseNotes: |-
-  Bug Fixes
-  - Films and shows in the HEVC format now show a picture on iPhones and iPads. They
-    played the sound with a black screen where the picture should have been, which
-    affected more than half of a typical collection. Nothing about the picture is
-    changed to fix it - it is sent in a wrapper Apple devices can open.
-
-  Earlier improvements
-  - Saving a change to which folder your films are in now answers straight away. It
-    used to sit there while every file was read, which on a big collection is minutes
-    of a page that looks stuck. It still checks the new folder is really there first,
-    so a wrong one is refused and your library keeps playing from the old one.
-
-  Earlier fixes
-  - The Specials fix below now reaches libraries that were already up and running.
-    Without this, only a library that happened to re-read its files from scratch would
-    have seen any change.
-  - A documentary or featurette sitting in a show's folder now appears as "Specials",
-    the way Kodi and Jellyfin file them. Before this it turned up as a second season
-    with no number and no artwork, sitting next to the real one.
-  - Changing which folder your films are in now updates the library straight away, and
-    shows you how far it has got while it reads. Before this it read the new folder
-    correctly and then carried on showing the old one, with nothing to say it had
-    finished.
-
-  First release, just before this one.
-
-  New features
-  - Play your films and shows from a Jellyfin or Emby server, or straight from a
-    folder of files.
-  - Watch in this dashboard, on any computer on your network, with nothing to install.
-  - Files that will not play on your phone are repackaged or converted here as they
-    play, on the machine's graphics chip.
-  - Subtitles, including the picture subtitles from discs.
-  - Download a film to a phone and watch it with everything switched off.
-  - Cast to a Roku or a Samsung TV, and drive it from your phone's lock screen.
-  - Where you stopped follows you between your own devices, and everyone in the house
-    has their own list.
-  - Pair with more than one machine and they look like one library.
-  - Someone you have shared with can ask for a film you do not have.
-
-  Sharing and safety
-  - Pair a device by scanning a code. Revoke it and playback stops within seconds,
-    mid-film.
-  - Guest passes that expire by themselves.
-  - Nothing about your library is uploaded anywhere, and nobody you share with gets a
-    copy of a file.
-
-  Good to know
-  - The phone apps are not in the app stores yet.
-  - Films kept on an external drive work, including drives you plug in later.
-  - Away from home on mobile data, playback is held to a lower quality so it does not
-    eat a data plan.
+  New Features
+  • Choose what each person can see. On the People page, every person now has a "Can see" line: tick the drives or folders they may watch, to any depth, and everything else disappears for them. Tick nothing and they see everything, as before. Films they have already downloaded stay on their phone.
+  • Decide it when you invite them, not after. Pairing a new device now asks what it will be able to see before it shows you a code, so a device can be limited from the moment it joins. Handing over the whole library asks you to confirm.
+  • The phone app works sideways, and on tablets. Turn it and the page fills the screen instead of staying a narrow column.
+  Improvements
+  • Films and TV shows with unusual filenames now get proper episode numbers. Anime numbered 01, 02, 03, files named only "E01", and several other naming styles were being filed with no episode number at all, so they could not be sorted or resumed.
+  • Specials, OVAs and bonus episodes are now filed under "Specials" instead of sitting numberless, and creditless openings and disc menus no longer show up as episodes.
+  • Films that cannot be read are now named on the dashboard. Previously a damaged or half-copied file simply never appeared in the library, with nothing said anywhere.
+  • Converting on an NVIDIA graphics card now works with the drivers Linux Mint and Ubuntu ship. The bundled converter needed a newer driver than those systems offer.
+  • When the video engine test fails, the page now shows what each graphics option said, in plain words, instead of one unexplained error.
+  • A television waiting on its Media Assistant channel is now named in the phone's TV picker, with the one step needed to fix it.
+  • Changes to what somebody can see reach their phone in about a second, without needing to refresh.
+  Security
+  • The file holding this machine's private key for reaching other libraries is no longer readable by other users on the same computer. Reported by a user; it is tightened automatically the next time PearCinema starts.
 path: ""
 defaultUsername: ""
 # umbrelOS replaces defaultPassword with the derived value when this is set - it is
