@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  # No app_proxy. The seeder MUST run with network_mode: host: devices dial in
+  # to it to pair and to back up, and under Docker's default bridge that never
+  # connects (measured on a real Umbrel 2026-10-05: bridge stalled, host paired
+  # in under a second). app_proxy cannot front a host-networked service, so the
+  # dashboard has its own login (SEEDER_PASSWORD, the app password umbrelOS
+  # shows next to the app), as PearTune's does.
+  app:
+    image: ghcr.io/peerloomllc/pearsheet-seeder:0.1.0@sha256:e334561817252e3ef912185025a6f59e71bc1d6a25f7c773d4c87ba586e0e3ba
+    restart: on-failure
+    stop_grace_period: 1m
+    network_mode: host
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      SEEDER_HOST: 0.0.0.0
+      SEEDER_PORT: "8761"
+      SEEDER_PASSWORD: ${APP_PASSWORD}
+    volumes:
+      # Seeder identity, paired devices and the encrypted sheets it holds.
+      - ${APP_DATA_DIR}/data:/data
