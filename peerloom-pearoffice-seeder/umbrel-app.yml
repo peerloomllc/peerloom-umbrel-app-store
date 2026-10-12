@@ -4,7 +4,7 @@ name: PearOffice Seeder
 icon: https://peerloomllc.com/assets/icon-pearoffice-seeder.svg
 tagline: Keep your shared PearOffice files online 24/7
 category: networking
-version: "0.1.0"
+version: "1.0.0"
 port: 8761
 description: >-
   Run a blind seeder for your PearOffice files on your Umbrel, so the people
@@ -35,7 +35,7 @@ repo: https://github.com/peerloomllc/pearoffice-releases
 support: https://github.com/peerloomllc/pearoffice-releases/issues
 gallery: []
 releaseNotes: >-
-  First release.
+  Updated PearOffice Seeder to 1.0.0. Full release notes: https://github.com/peerloomllc/pearoffice-releases/releases/tag/v1.0.0
 path: ""
 defaultUsername: ""
 # umbrelOS shows the derived app password next to the app when this is set
