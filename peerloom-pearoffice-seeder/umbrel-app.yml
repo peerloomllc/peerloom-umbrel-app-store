@@ -1,33 +1,30 @@
 manifestVersion: 1
 id: peerloom-pearoffice-seeder
-name: PearOffice Seeder
+name: PearOffice Seeder (now PeerLoom Seeder)
 icon: https://peerloomllc.com/assets/icon-pearoffice-seeder.svg
-tagline: Keep your shared PearOffice files online 24/7
+tagline: Now PeerLoom Seeder. New installs should use PeerLoom Seeder
 category: networking
-version: "1.0.0"
+version: "1.0.1"
 port: 8761
 description: >-
-  Run a blind seeder for your PearOffice files on your Umbrel, so the people
-  you share a spreadsheet, document or slide deck with stay in sync even when
-  every device is off.
+  PearOffice Seeder is now PeerLoom Seeder, one seeder for every PeerLoom app.
+  This is its last release under the old name.
 
 
-  PearOffice is a peer-to-peer office app with no accounts and no servers: a
-  file lives only on the devices of the people it is shared with and syncs
-  directly between them. That means a file is only reachable while one of
-  those devices is online. This app keeps an always-on copy of each file your
-  devices back up to it, so everyone catches up whoever is online. With a
-  seeder, your recovery phrase also brings your files back on a new device.
+  Already installed? Update and keep it. It keeps the same seeder, paired
+  devices and stored files, so your devices need nothing, and it now serves
+  PearList, PearCal, PearCircle and PearPetal too.
+
+
+  Not installed yet? Install PeerLoom Seeder from this store instead. Do not
+  run both: they use the same port.
 
 
   It is a "blind" seeder: it stores and serves only encrypted data and is never
-  given a file's key, so your Umbrel keeps your files available without ever
-  being able to read them.
+  given the keys, so your Umbrel keeps your files available without ever being
+  able to read them.
 
 
-  To pair a device: open the seeder, enter the password shown next to the app,
-  choose Pair a device, then scan the code in PearOffice under Settings >
-  Seeder.
 developer: PeerLoom
 website: https://peerloomllc.com
 dependencies: []
@@ -35,7 +32,9 @@ repo: https://github.com/peerloomllc/pearoffice-releases
 support: https://github.com/peerloomllc/pearoffice-releases/issues
 gallery: []
 releaseNotes: >-
-  Updated PearOffice Seeder to 1.0.0. Full release notes: https://github.com/peerloomllc/pearoffice-releases/releases/tag/v1.0.0
+  PearOffice Seeder is now PeerLoom Seeder 1.0.0, one seeder for every PeerLoom
+  app. Your seeder, paired devices and stored files are kept. Full release
+  notes: https://github.com/peerloomllc/peerloom-seeder/releases/tag/v1.0.0
 path: ""
 defaultUsername: ""
 # umbrelOS shows the derived app password next to the app when this is set
