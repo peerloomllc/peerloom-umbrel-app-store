@@ -8,7 +8,9 @@ services:
   # dashboard has its own login (SEEDER_PASSWORD, the app password umbrelOS
   # shows next to the app), as PearTune's does.
   app:
-    image: ghcr.io/peerloomllc/pearoffice-seeder:1.0.0@sha256:c1b066a64bd06a1e87385396d2d5a06294b1316314ae8577e936ffc42704ea9b
+    # PeerLoom Seeder runs the same code on the same data folder, so this
+    # upgrade keeps the seeder key, paired devices and stored files.
+    image: ghcr.io/peerloomllc/peerloom-seeder:1.0.0@sha256:e568957363b0e3ba57935093276c5d734ca3c288738a0dd736ec0081d635f4e1
     restart: on-failure
     stop_grace_period: 1m
     network_mode: host
